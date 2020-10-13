@@ -1,0 +1,4 @@
+
+EXPORTS
+	WSPStartup		@1
+	SetMainPage		@2
