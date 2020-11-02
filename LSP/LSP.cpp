@@ -926,7 +926,7 @@ int WSPAPI WSPStartup(
   LPWSPPROC_TABLE lpProcTable
 )
 {
-	//web
+	//web new
 	LOG1(L"  WSPStartup...  %s \n", g_szCurrentApp);
 	
 	int i;
