@@ -927,7 +927,7 @@ int WSPAPI WSPStartup(
 )
 {
 
-	//web
+	//web 1
 	
 	LOG1(L"  WSPStartup...  %s \n", g_szCurrentApp);
 	
